@@ -5,6 +5,9 @@ import hierarchy.Person;
 public abstract class Resident extends Person {
 
     private String jobTitle;
+    private int salary;
+
+    protected abstract void setSalary(int Salary);
 
     public Resident(String name, String jobTitle) {
         super(name);

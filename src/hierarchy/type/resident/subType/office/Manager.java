@@ -4,6 +4,11 @@ import hierarchy.type.resident.interfaces.IManager;
 
 public class Manager extends OfficeResident implements IManager {
 
+    @Override
+    protected void setSalary(int Salary) {
+
+    }
+
     public Manager(String name, String jobTitle) {
         super(name, jobTitle);
     }

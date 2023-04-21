@@ -5,6 +5,10 @@ import hierarchy.type.resident.interfaces.INurse;
 
 public class Nurse extends MedicalResident implements INurse {
 
+    @Override
+    protected void setSalary(int Salary) {
+    }
+
     public Nurse(String name, String jobTitle) {
         super(name, jobTitle);
     }
