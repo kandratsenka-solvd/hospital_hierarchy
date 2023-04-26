@@ -1,6 +1,6 @@
-package hierarchy.type.resident.interfaces;
+package project.interfaces.resident;
 
-import hierarchy.type.nonResident.subType.Patient;
+import project.person.nonResident.subType.Patient;
 
 public interface INurse {
     void takeVitalSigns(Patient patient);

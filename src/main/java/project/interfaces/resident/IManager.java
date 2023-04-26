@@ -1,4 +1,4 @@
-package hierarchy.type.resident.interfaces;
+package project.interfaces.resident;
 
 public interface IManager {
     void setGoals();

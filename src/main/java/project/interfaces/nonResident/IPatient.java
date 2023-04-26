@@ -1,4 +1,4 @@
-package hierarchy.type.nonResident.interfaces;
+package project.interfaces.nonResident;
 
 public interface IPatient {
     void register();

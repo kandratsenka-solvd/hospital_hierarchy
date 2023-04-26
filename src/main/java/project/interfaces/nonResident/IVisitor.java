@@ -1,6 +1,6 @@
-package hierarchy.type.nonResident.interfaces;
+package project.interfaces.nonResident;
 
-import hierarchy.type.nonResident.subType.Patient;
+import project.person.nonResident.subType.Patient;
 
 public interface IVisitor {
     void checkIn();
