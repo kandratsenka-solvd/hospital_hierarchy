@@ -1,11 +1,20 @@
-package project.person.resident.subType.medical;
+package project.person.resident.medical;
 
-import project.person.nonResident.subType.Patient;
+import org.apache.logging.log4j.Logger;
+import project.person.nonResident.Patient;
 import project.interfaces.resident.IDoctor;
+import utils.LoggerUtil;
+
+import java.util.Objects;
 
 public class Doctor extends MedicalResident implements IDoctor {
 
+    final static Logger LOGGER;
     private String doctorSpecialty;
+
+    static {
+        LOGGER = LoggerUtil.getLogger();
+    }
 
     public Doctor(){}
 
@@ -24,14 +33,17 @@ public class Doctor extends MedicalResident implements IDoctor {
 
     @Override
     public void examinePatient(Patient patient) {
+        LOGGER.info("Examining patient...");
     }
 
     @Override
     public void diagnosePatient(Patient patient) {
+        LOGGER.info("Diagnosing patient...");
     }
 
     @Override
     public void prescribeMedication(Patient patient) {
+        LOGGER.info("Prescribing medication...");
     }
 
     @Override
@@ -46,6 +58,7 @@ public class Doctor extends MedicalResident implements IDoctor {
 
     @Override
     public String toString() {
+        LOGGER.info("Getting doctor's info...");
         return String.format("""
                         first name: %s
                         last name: %s
@@ -61,4 +74,15 @@ public class Doctor extends MedicalResident implements IDoctor {
                 getJobTitle(), getMedicalSpecialty(), getHireDate(), getSalary());
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Doctor)) return false;
+        return super.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getPersonalId());
+    }
 }

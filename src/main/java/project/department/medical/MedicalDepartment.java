@@ -1,82 +1,126 @@
 package project.department.medical;
 
-import exceptions.DoctorNotFoundException;
-import exceptions.NurseNotFoundException;
-import exceptions.PatientNotFoundException;
-import org.apache.logging.log4j.LogManager;
+import exceptions.DepartmentNotFoundException;
+import exceptions.EmptyListException;
+import exceptions.PersonNotFoundException;
 import org.apache.logging.log4j.Logger;
-import project.utils.LoggerUtil;
-import project.person.nonResident.subType.Patient;
-import project.person.resident.subType.medical.Doctor;
-import project.person.resident.subType.medical.Nurse;
+import project.department.Department;
+import project.person.nonResident.Patient;
+import project.person.resident.medical.Doctor;
+import project.person.resident.medical.Nurse;
+import utils.LoggerUtil;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 
-public class MedicalDepartment {
 
-    private static final Logger LOGGER = LoggerUtil.getLogger();
-    private ArrayList<Doctor> doctors = new ArrayList<>();
-    private ArrayList<Nurse> nurses = new ArrayList<>();
-    private ArrayList<Patient> patients = new ArrayList<>();
-    private int bedsAvailable;
+public abstract class MedicalDepartment extends Department {
 
-    public MedicalDepartment() {}
+    final static Logger LOGGER;
 
-    public MedicalDepartment(int bedsAvailable) {
-        this.bedsAvailable = bedsAvailable;
-        doctors = new ArrayList<>();
-        nurses = new ArrayList<>();
-        patients = new ArrayList<>();
+    static {
+        LOGGER = LoggerUtil.getLogger();
     }
 
-    public void assignDoctor(Doctor doctor, Patient patient) throws DoctorNotFoundException, PatientNotFoundException {
-        LOGGER.info("Assigning a doctor to the patient");
-        if (doctors.contains(doctor) && patients.contains(patient)) {
-            patient.setDoctor(doctor);
-            System.out.println("Doctor " + doctor.getFirstName() + " assigned to " + patient.getFirstName() + ".");
-        } else {
-            if (!doctors.contains(doctor)) {
-                LOGGER.error("Error when assigning a doctor to the patient");
-                throw new DoctorNotFoundException("The doctor does not exist");
-            } else {
-                LOGGER.error("Error when assigning a doctor to the patient");
-                throw new PatientNotFoundException("The patient does not exist");
+     public MedicalDepartment() {}
+
+    abstract void addDoctorToList(Doctor doctor);
+
+    abstract void addNurseToList(Nurse nurse);
+
+    abstract void addPatientToList(Patient patient);
+
+    abstract void assignDoctor(Doctor doctor, Patient patient);
+
+    abstract void assignNurse(Nurse nurse, Patient patient) throws PersonNotFoundException;
+
+    abstract HashSet<String> getUniqueDiagnoses() throws EmptyListException;
+
+    public static HashMap<String, Integer> getFreeBedsByDepartmentList() {
+        LOGGER.info("Getting free beds list by department...");
+        HashMap<String, Integer> bedsByDepartment = new HashMap<>();
+        bedsByDepartment.put("Surgery", Surgery.bedsNumber - Surgery.getPatientsNumber());
+        bedsByDepartment.put("Cardiology", Cardiology.bedsNumber - Cardiology.getPatientsNumber());
+        bedsByDepartment.put("Neurology", Neurology.bedsNumber - Neurology.getPatientsNumber());
+        bedsByDepartment.put("Oncology", Oncology.bedsNumber - Oncology.getPatientsNumber());
+        bedsByDepartment.put("Psychiatry", Psychiatry.bedsNumber - Psychiatry.getPatientsNumber());
+        bedsByDepartment.put("Pediatrics", Pediatrics.bedsNumber - Pediatrics.getPatientsNumber());
+        return bedsByDepartment;
+    }
+
+    public void getFreeBedsByDepartment(String departmentName) throws DepartmentNotFoundException {
+        LOGGER.info("Getting free beds by department...");
+        HashMap<String, Integer> bedsByDepartment = null;
+        try {
+            bedsByDepartment = getFreeBedsByDepartmentList();
+            if (!bedsByDepartment.containsKey(departmentName)) {
+                throw new DepartmentNotFoundException("Department not found: " + departmentName);
             }
+            Integer freeBeds = bedsByDepartment.get(departmentName);
+            LOGGER.info(String.format("Free beds in department %s: %s", departmentName, freeBeds.toString()));
+        } catch (DepartmentNotFoundException e) {
+            LOGGER.error(e.getMessage());
+            throw e;
+        } finally {
+            LOGGER.info("Free beds by department retrieval completed.");
         }
     }
 
-    public void assignNurse(Nurse nurse, Patient patient) throws NurseNotFoundException, PatientNotFoundException {
-        LOGGER.info("Assigning a nurse to the patient");
-        if (nurses.contains(nurse) && patients.contains(patient)) {
-            patient.setNurse(nurse);
-            System.out.println("Nurse " + nurse.getFirstName() + " assigned to " + patient.getFirstName() + ".");
-        } else {
-            if (!nurses.contains(nurse)) {
-                LOGGER.error("Error when assigning a nurse to the patient");
-                throw new NurseNotFoundException("The nurse does not exist");
-            } else {
-                LOGGER.error("Error when assigning a nurse to the patient");
-                throw new PatientNotFoundException("The patient does not exist");
-            }
-        }
+
+    public static LinkedList<Patient> getPatientlinkedList() {
+        LOGGER.info("Getting patients linked list...");
+        LinkedList<Patient> allPatients = new LinkedList<>();
+        allPatients.addAll(Surgery.getPatientList());
+        allPatients.addAll(Cardiology.getPatientList());
+        allPatients.addAll(Neurology.getPatientList());
+        allPatients.addAll(Oncology.getPatientList());
+        allPatients.addAll(Psychiatry.getPatientList());
+        allPatients.addAll(Pediatrics.getPatientList());
+        return allPatients;
     }
 
-    public int getAvailableBeds() {
-        return bedsAvailable;
+    public static int getEmployeeNumber() {
+        return getDoctorsTotalNumber() + getNursesTotalNumber();
     }
 
-    public ArrayList<Doctor> getDoctorList() {
-        return doctors;
+    public static int getFreeBedsTotalNumber() {
+        LOGGER.info("Getting free beds total number...");
+        return (Surgery.bedsNumber +
+                Cardiology.bedsNumber +
+                Neurology.bedsNumber +
+                Oncology.bedsNumber +
+                Psychiatry.bedsNumber +
+                Pediatrics.bedsNumber) - getPatientsTotalNumber();
     }
 
-    public void addDoctorToList(Doctor doctor) {
+    public static int getDoctorsTotalNumber() {
+        LOGGER.info("Getting doctors total number...");
+        return Surgery.getDoctorsNumber() +
+                Cardiology.getDoctorsNumber() +
+                Neurology.getDoctorsNumber() +
+                Oncology.getDoctorsNumber() +
+                Psychiatry.getDoctorsNumber() +
+                Pediatrics.getDoctorsNumber();
     }
 
-    public ArrayList<Patient> getPatientList() {
-        return patients;
+    public static int getNursesTotalNumber() {
+        LOGGER.info("Getting nurses total number...");
+        return Surgery.getNursesNumber() +
+                Cardiology.getNursesNumber() +
+                Neurology.getNursesNumber() +
+                Oncology.getNursesNumber() +
+                Psychiatry.getNursesNumber() +
+                Pediatrics.getNursesNumber();
     }
 
-    public ArrayList<Nurse> getNurseList() {
-        return nurses;
+    public static int getPatientsTotalNumber() {
+        LOGGER.info("Getting patients total number...");
+         return Surgery.getPatientsNumber() +
+                 Cardiology.getPatientsNumber() +
+                 Neurology.getPatientsNumber() +
+                 Oncology.getPatientsNumber() +
+                 Psychiatry.getPatientsNumber() +
+                 Pediatrics.getPatientsNumber();
     }
 }

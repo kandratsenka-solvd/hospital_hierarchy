@@ -1,4 +1,4 @@
-package project.person.resident.subType.medical;
+package project.person.resident.medical;
 
 import project.person.resident.Resident;
 

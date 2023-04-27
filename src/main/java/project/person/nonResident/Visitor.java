@@ -1,9 +1,10 @@
-package project.person.nonResident.subType;
+package project.person.nonResident;
 
-import project.person.nonResident.NonResident;
 import project.interfaces.nonResident.IVisitor;
 
 public class Visitor extends NonResident implements IVisitor {
+
+    public Visitor(){}
 
     public Visitor (String firstName, String lastName, String gender, int personalId, String birthDate) {
         super(firstName, lastName, gender, personalId, birthDate);

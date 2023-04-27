@@ -1,12 +1,12 @@
-package project.utils;
+package utils;
 
 import com.github.javafaker.Faker;
 import project.enums.JobTitle;
 import project.enums.specialTitle.DoctorSpecialty;
 import project.enums.specialTitle.NurseSpecialty;
-import project.person.nonResident.subType.Patient;
-import project.person.resident.subType.medical.Doctor;
-import project.person.resident.subType.medical.Nurse;
+import project.person.nonResident.Patient;
+import project.person.resident.medical.Doctor;
+import project.person.resident.medical.Nurse;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;

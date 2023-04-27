@@ -1,12 +1,12 @@
-package project.person.resident.subType.service;
+package project.person.resident.office;
 
 import project.person.resident.Resident;
 
-public abstract class ServiceResident extends Resident {
+public abstract class OfficeResident extends Resident {
 
-    public ServiceResident() {}
+    public OfficeResident () {}
 
-    public ServiceResident(String firstName,
+    public OfficeResident (String firstName,
                            String lastName,
                            String gender,
                            int personalId,

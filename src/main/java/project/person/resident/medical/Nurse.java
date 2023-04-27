@@ -1,7 +1,9 @@
-package project.person.resident.subType.medical;
+package project.person.resident.medical;
 
-import project.person.nonResident.subType.Patient;
+import project.person.nonResident.Patient;
 import project.interfaces.resident.INurse;
+
+import java.util.Objects;
 
 public class Nurse extends MedicalResident implements INurse {
 
@@ -37,6 +39,19 @@ public class Nurse extends MedicalResident implements INurse {
                         """,
                 getFirstName(), getLastName(), getGender(), getPersonalId(), getBirthDate(),
                 getJobTitle(), getMedicalSpecialty(), getHireDate(), getSalary());
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Nurse)) return false;
+        return super.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getPersonalId());
     }
 
     @Override

@@ -2,10 +2,6 @@ package project.person;
 
 public abstract class Person {
 
-    // add empty constructors: done
-    // which class can be final?
-    //add static fields
-
     private String firstName;
     private String lastName;
     private String gender;

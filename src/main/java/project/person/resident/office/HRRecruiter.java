@@ -1,9 +1,6 @@
-package project.person.resident.subType.office;
+package project.person.resident.office;
 
-import project.person.resident.subType.medical.Doctor;
-
-import java.sql.SQLException;
-import java.sql.Statement;
+import project.person.resident.medical.Doctor;
 
 public class HRRecruiter extends OfficeResident {
 
