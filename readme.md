@@ -1,0 +1,21 @@
+Requirements:
+- At least 15 classes.
+- All classes must contain properties (minimum 1).
+- At least 5 private properties (in total, in any classes).
+- All private variables must have getters and setters.
+- All classes should have at least one custom constructor.
+- Create separate class with main() which will instantiate objects of implemented classes.
+- Use polymorphism with at least one abstract class.
+- Create and override at least one abstract method.
+- Use at protected modifier at least 5 times.
+- Override methods from class Object (toString(), hashcode(), equals()) for at least 3 classes from the hierarchy.
+- Add 5 interfaces to the existing hierarchy.
+- Use polymorphism with the abstract class and interface from the hierarchy.
+- Create final class, method, variable.
+- Create a static block, method, variable.
+- Create 5 custom exceptions.
+- Handle exceptions in 2 ways.
+- Use try-catch with resources.
+- Log messages to the console, file.
+- Add 5 collections to the hierarchy.
+- Create custom implementation of LinkedList with generic and use it in your project.
