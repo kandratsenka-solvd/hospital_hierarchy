@@ -1,6 +1,6 @@
 package project.interfaces.nonResident;
 
-import project.person.nonResident.subType.Patient;
+import project.person.nonResident.Patient;
 
 public interface IVisitor {
     void checkIn();

@@ -1,6 +1,6 @@
 package project.interfaces.resident;
 
-import project.person.nonResident.subType.Patient;
+import project.person.nonResident.Patient;
 
 public interface INurse {
     void takeVitalSigns(Patient patient);
