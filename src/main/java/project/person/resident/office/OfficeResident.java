@@ -4,6 +4,8 @@ import project.person.resident.Resident;
 
 public abstract class OfficeResident extends Resident {
 
+    protected static int accessLevel = 5;
+
     public OfficeResident () {}
 
     public OfficeResident (String firstName,

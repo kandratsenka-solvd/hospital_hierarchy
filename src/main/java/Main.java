@@ -1,3 +1,4 @@
+import exceptions.EmptyListException;
 import org.apache.logging.log4j.Logger;
 import project.department.medical.Cardiology;
 import project.department.medical.MedicalDepartment;
@@ -12,7 +13,7 @@ import java.util.Map;
 
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws EmptyListException {
         final Logger LOGGER = LoggerUtil.getLogger();
         Doctor doctor1 = PersonUtil.generateDoctor();
         Doctor doctor2 = PersonUtil.generateDoctor();

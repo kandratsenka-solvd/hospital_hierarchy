@@ -1,6 +1,8 @@
 package utils;
 
 import com.github.javafaker.Faker;
+import exceptions.EmptyListException;
+import org.apache.logging.log4j.Logger;
 import project.enums.JobTitle;
 import project.enums.specialTitle.DoctorSpecialty;
 import project.enums.specialTitle.NurseSpecialty;
@@ -20,17 +22,23 @@ public final class PersonUtil {
 
     private static final Faker faker;
     private static final Random random;
+    private static final Logger LOGGER;
 
     static {
         faker = new Faker();
         random = new Random();
+        LOGGER = LoggerUtil.getLogger();
     }
 
-    public static Doctor generateDoctor() {
+    public static Doctor generateDoctor() throws EmptyListException {
+        LOGGER.info("Generating data for creating an object of the Doctor class...");
         Random random = new Random();
         ArrayList<String> specialtyList = new ArrayList<>();
         for (DoctorSpecialty specialty : DoctorSpecialty.values()) {
             specialtyList.add(specialty.getDoctorJobTitle());
+        }
+        if (specialtyList.isEmpty()) {
+            throw new EmptyListException("No doctor specialty found in the empty list.");
         }
         String firstName = faker.name().firstName();
         String lastName = faker.name().lastName();
@@ -48,6 +56,7 @@ public final class PersonUtil {
     }
 
     public static Patient generatePatient() {
+        LOGGER.info("Generating data for creating an object of the Patient class...");
         String firstName = faker.name().firstName();
         String lastName = faker.name().lastName();
         String gender = faker.demographic().sex();
@@ -62,10 +71,14 @@ public final class PersonUtil {
         return new Patient(firstName, lastName, gender, personalId, birthDate, admissionDate, disease, symptoms);
     }
 
-    public static Nurse generateNurse() {
+    public static Nurse generateNurse() throws EmptyListException {
+        LOGGER.info("Generating data for creating an object of the Nurse class...");
         ArrayList<String> specialtyList = new ArrayList<>();
         for (NurseSpecialty specialty : NurseSpecialty.values()) {
             specialtyList.add(specialty.getNurseJobTitle());
+        }
+        if (specialtyList.isEmpty()) {
+            throw new EmptyListException("No nurse specialty found in the empty list.");
         }
         String firstName = faker.name().firstName();
         String lastName = faker.name().lastName();
@@ -76,9 +89,9 @@ public final class PersonUtil {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String birthDate = dateFormat.format(faker.date().between(startDate, endDate));
         String jobTitle = JobTitle.NURSE.getJobTitle();
-        String doctorSpecialty = specialtyList.get(random.nextInt(specialtyList.size()));
+        String nurseSpecialty = specialtyList.get(random.nextInt(specialtyList.size()));
         String hireDate = LocalDate.now().minus(faker.number().numberBetween(1, 11), ChronoUnit.YEARS).toString();
         double salary = faker.number().randomDouble(2, 1000, 100000);
-        return new Nurse(firstName, lastName, gender, personalId, birthDate, jobTitle, doctorSpecialty, hireDate, salary);
+        return new Nurse(firstName, lastName, gender, personalId, birthDate, jobTitle, nurseSpecialty, hireDate, salary);
     }
 }
