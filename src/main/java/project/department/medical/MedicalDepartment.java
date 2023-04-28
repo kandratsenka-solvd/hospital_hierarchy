@@ -67,7 +67,6 @@ public abstract class MedicalDepartment extends Department {
         }
     }
 
-
     public static LinkedList<Patient> getPatientlinkedList() {
         LOGGER.info("Getting patients linked list...");
         LinkedList<Patient> allPatients = new LinkedList<>();
