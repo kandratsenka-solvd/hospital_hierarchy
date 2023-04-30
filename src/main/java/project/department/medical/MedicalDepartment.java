@@ -26,6 +26,12 @@ public abstract class MedicalDepartment extends Department {
 
      public MedicalDepartment() {}
 
+    abstract public ArrayList<Doctor> getDoctorList();
+
+    abstract public ArrayList<Patient> getPatientList();
+
+    abstract public ArrayList<Nurse> getNurseList();
+
     public void addDoctorToList(Doctor doctor) {
         getDoctorList().add(doctor);
     }
@@ -37,12 +43,6 @@ public abstract class MedicalDepartment extends Department {
     public void addNurseToList(Nurse nurse) {
         getNurseList().add(nurse);
     }
-
-    abstract public ArrayList<Doctor> getDoctorList();
-
-    abstract public ArrayList<Patient> getPatientList();
-
-    abstract public ArrayList<Nurse> getNurseList();
 
     public int getDoctorsNumber() {
         return getDoctorList().size();
