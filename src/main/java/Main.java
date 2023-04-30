@@ -13,8 +13,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import static project.department.medical.Cardiology.getPatientList;
-
 
 public class Main {
     public static void main(String[] args) throws EmptyListException {
@@ -42,10 +40,11 @@ public class Main {
             LOGGER.info(key + " = " + value);
         }
         LinkedList<String> patientLinkedList = new LinkedList<>();
-        ArrayList<Patient> patientList = getPatientList();
+        ArrayList<Patient> patientList = cardiology.getPatientList();
         for (Patient patient: patientList) {
             patientLinkedList.add(0, patient.getFirstName());
         }
+        System.out.println(cardiology.toString("Cardiology"));
         LOGGER.info(patientList);
         cardiology.getFreeBedsByDepartment("abc");
     }

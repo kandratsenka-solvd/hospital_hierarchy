@@ -10,6 +10,7 @@ import project.person.resident.medical.Doctor;
 import project.person.resident.medical.Nurse;
 import utils.LoggerUtil;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -25,27 +26,127 @@ public abstract class MedicalDepartment extends Department {
 
      public MedicalDepartment() {}
 
-    abstract void addDoctorToList(Doctor doctor);
+    public void addDoctorToList(Doctor doctor) {
+        getDoctorList().add(doctor);
+    }
 
-    abstract void addNurseToList(Nurse nurse);
+    public void addPatientToList(Patient patient) {
+        getPatientList().add(patient);
+    }
 
-    abstract void addPatientToList(Patient patient);
+    public void addNurseToList(Nurse nurse) {
+        getNurseList().add(nurse);
+    }
 
-    abstract void assignDoctor(Doctor doctor, Patient patient);
+    abstract public ArrayList<Doctor> getDoctorList();
 
-    abstract void assignNurse(Nurse nurse, Patient patient) throws PersonNotFoundException;
+    abstract public ArrayList<Patient> getPatientList();
 
-    abstract HashSet<String> getUniqueDiagnoses() throws EmptyListException;
+    abstract public ArrayList<Nurse> getNurseList();
+
+    public int getDoctorsNumber() {
+        return getDoctorList().size();
+    }
+
+    public int getNursesNumber() {
+        return getNurseList().size();
+    }
+
+    public int getPatientsNumber() {
+        return getPatientList().size();
+    }
+
+    private static Surgery createSurgery() {
+        return new Surgery();
+    }
+
+    private static Cardiology createCardiology() {
+        return new Cardiology();
+    }
+
+    private static Neurology createNeurology() {
+        return new Neurology();
+    }
+
+    private static Oncology createOncology() {
+        return new Oncology();
+    }
+
+    private static Psychiatry createPsychiatry() {
+        return new Psychiatry();
+    }
+
+    private static Pediatrics createPediatrics() {
+        return new Pediatrics();
+    }
+
+    public void assignDoctor(Doctor doctor, Patient patient) {
+        LOGGER.info("Assigning a doctor to the patient...");
+        try {
+            if (getDoctorList().contains(doctor) && getPatientList().contains(patient)) {
+                patient.setDoctor(doctor);
+                LOGGER.info("Doctor " + doctor.getFirstName() + " assigned to " + patient.getFirstName() + ".");
+            } else {
+                if (!getDoctorList().contains(doctor)) {
+                    LOGGER.error("Error when assigning a doctor to the patient.");
+                    throw new PersonNotFoundException("The doctor does not exist.");
+                } else {
+                    LOGGER.error("Error when assigning a doctor to the patient.");
+                    throw new PersonNotFoundException("The patient does not exist.");
+                }
+            }
+        } catch (PersonNotFoundException e) {
+            LOGGER.error(e.getMessage());
+        } finally {
+            LOGGER.warn("Closing connections...");
+        }
+    }
+
+    public void assignNurse(Nurse nurse, Patient patient) throws PersonNotFoundException {
+        LOGGER.info("Assigning a nurse to the patient");
+        if (getNurseList().contains(nurse) && getPatientList().contains(patient)) {
+            patient.setNurse(nurse);
+            System.out.println("Nurse " + nurse.getFirstName() + " assigned to " + patient.getFirstName() + ".");
+        } else {
+            if (!getNurseList().contains(nurse)) {
+                LOGGER.error("Error when assigning a nurse to the patient");
+                throw new PersonNotFoundException("The nurse does not exist");
+            } else {
+                LOGGER.error("Error when assigning a nurse to the patient");
+                throw new PersonNotFoundException("The patient does not exist");
+            }
+        }
+    }
+
+    public void setDoctor(Doctor doctor, Patient patient) {
+        if (getDoctorList().contains(doctor) && getPatientList().contains(patient)) {
+            patient.setDoctor(doctor);
+            LOGGER.info("Doctor " + doctor.getFirstName() + " assigned to " + patient.getFirstName() + ".");
+        }
+    }
+
+    HashSet<String> getUniqueDiagnoses() throws EmptyListException {
+        LOGGER.info("Getting list of unique diagnoses...");
+        HashSet<String> uniqueDiagnoses = new HashSet<>();
+        ArrayList<Patient> patientList = getPatientList();
+        for (Patient patient: patientList) {
+            uniqueDiagnoses.add(patient.getDiagnosis());
+        }
+        if (uniqueDiagnoses.isEmpty()) {
+            throw new EmptyListException("No unique diagnoses found.");
+        }
+        return uniqueDiagnoses;
+    }
 
     public static HashMap<String, Integer> getFreeBedsByDepartmentList() {
         LOGGER.info("Getting free beds list by department...");
         HashMap<String, Integer> bedsByDepartment = new HashMap<>();
-        bedsByDepartment.put("Surgery", Surgery.bedsNumber - Surgery.getPatientsNumber());
-        bedsByDepartment.put("Cardiology", Cardiology.bedsNumber - Cardiology.getPatientsNumber());
-        bedsByDepartment.put("Neurology", Neurology.bedsNumber - Neurology.getPatientsNumber());
-        bedsByDepartment.put("Oncology", Oncology.bedsNumber - Oncology.getPatientsNumber());
-        bedsByDepartment.put("Psychiatry", Psychiatry.bedsNumber - Psychiatry.getPatientsNumber());
-        bedsByDepartment.put("Pediatrics", Pediatrics.bedsNumber - Pediatrics.getPatientsNumber());
+        bedsByDepartment.put("Surgery", Surgery.bedsNumber - createSurgery().getPatientsNumber());
+        bedsByDepartment.put("Cardiology", Cardiology.bedsNumber - createCardiology().getPatientsNumber());
+        bedsByDepartment.put("Neurology", Neurology.bedsNumber - createNeurology().getPatientsNumber());
+        bedsByDepartment.put("Oncology", Oncology.bedsNumber - createOncology().getPatientsNumber());
+        bedsByDepartment.put("Psychiatry", Psychiatry.bedsNumber - createPsychiatry().getPatientsNumber());
+        bedsByDepartment.put("Pediatrics", Pediatrics.bedsNumber - createPediatrics().getPatientsNumber());
         return bedsByDepartment;
     }
 
@@ -67,15 +168,15 @@ public abstract class MedicalDepartment extends Department {
         }
     }
 
-    public static LinkedList<Patient> getPatientlinkedList() {
+    protected static LinkedList<Patient> getPatientlinkedList() {
         LOGGER.info("Getting patients linked list...");
         LinkedList<Patient> allPatients = new LinkedList<>();
-        allPatients.addAll(Surgery.getPatientList());
-        allPatients.addAll(Cardiology.getPatientList());
-        allPatients.addAll(Neurology.getPatientList());
-        allPatients.addAll(Oncology.getPatientList());
-        allPatients.addAll(Psychiatry.getPatientList());
-        allPatients.addAll(Pediatrics.getPatientList());
+        allPatients.addAll(createSurgery().getPatientList());
+        allPatients.addAll(createCardiology().getPatientList());
+        allPatients.addAll(createNeurology().getPatientList());
+        allPatients.addAll(createOncology().getPatientList());
+        allPatients.addAll(createPediatrics().getPatientList());
+        allPatients.addAll(createPsychiatry().getPatientList());
         return allPatients;
     }
 
@@ -93,33 +194,56 @@ public abstract class MedicalDepartment extends Department {
                 Pediatrics.bedsNumber) - getPatientsTotalNumber();
     }
 
-    public static int getDoctorsTotalNumber() {
+    protected static int getDoctorsTotalNumber() {
         LOGGER.info("Getting doctors total number...");
-        return Surgery.getDoctorsNumber() +
-                Cardiology.getDoctorsNumber() +
-                Neurology.getDoctorsNumber() +
-                Oncology.getDoctorsNumber() +
-                Psychiatry.getDoctorsNumber() +
-                Pediatrics.getDoctorsNumber();
+        return createSurgery().getDoctorsNumber() +
+                createCardiology().getDoctorsNumber() +
+                createNeurology().getDoctorsNumber() +
+                createOncology().getDoctorsNumber() +
+                createPsychiatry().getDoctorsNumber() +
+                createPediatrics().getDoctorsNumber();
     }
 
-    public static int getNursesTotalNumber() {
+    protected static int getNursesTotalNumber() {
         LOGGER.info("Getting nurses total number...");
-        return Surgery.getNursesNumber() +
-                Cardiology.getNursesNumber() +
-                Neurology.getNursesNumber() +
-                Oncology.getNursesNumber() +
-                Psychiatry.getNursesNumber() +
-                Pediatrics.getNursesNumber();
+        return createSurgery().getNursesNumber() +
+                createCardiology().getNursesNumber() +
+                createNeurology().getNursesNumber() +
+                createOncology().getNursesNumber() +
+                createPsychiatry().getNursesNumber() +
+                createPediatrics().getNursesNumber();
     }
 
-    public static int getPatientsTotalNumber() {
+    protected static int getPatientsTotalNumber() {
         LOGGER.info("Getting patients total number...");
-         return Surgery.getPatientsNumber() +
-                 Cardiology.getPatientsNumber() +
-                 Neurology.getPatientsNumber() +
-                 Oncology.getPatientsNumber() +
-                 Psychiatry.getPatientsNumber() +
-                 Pediatrics.getPatientsNumber();
+         return createSurgery().getPatientsNumber() +
+                 createCardiology().getPatientsNumber() +
+                 createNeurology().getPatientsNumber() +
+                 createOncology().getPatientsNumber() +
+                 createPsychiatry().getPatientsNumber() +
+                 createPediatrics().getPatientsNumber();
+    }
+
+    @Override
+    public String toString(String departmentName) {
+        ArrayList<String> doctorNames = new ArrayList<>();
+        ArrayList<String> nursesNames = new ArrayList<>();
+        ArrayList<String> patientsNames = new ArrayList<>();
+        for(Doctor doctor: getDoctorList()) {
+            doctorNames.add(doctor.getFirstName() + " " + doctor.getLastName());
+        }
+        for(Nurse nurse: getNurseList()) {
+            nursesNames.add(nurse.getFirstName() + " " + nurse.getLastName());
+        }
+        for(Patient patient: getPatientList()) {
+            patientsNames.add(patient.getFirstName() + " " + patient.getLastName());
+        }
+        return String.format("""
+                        =%s Department=
+                        Doctors: %s
+                        Nurses: %s
+                        Patients: %s
+                        """,
+                departmentName, doctorNames, nursesNames, patientsNames);
     }
 }
