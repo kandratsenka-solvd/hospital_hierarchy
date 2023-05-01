@@ -23,7 +23,7 @@ public class Main {
         Patient patient2 = PersonUtil.generatePatient();
         Patient patient3 = PersonUtil.generatePatient();
         Nurse nurse = PersonUtil.generateNurse();
-        Cardiology cardiology = new Cardiology();
+        Cardiology cardiology = Cardiology.getInstance();
         cardiology.addDoctorToList(doctor1);
         cardiology.addDoctorToList(doctor2);
         cardiology.addNurseToList(nurse);
@@ -44,8 +44,5 @@ public class Main {
         for (Patient patient: patientList) {
             patientLinkedList.add(0, patient.getFirstName());
         }
-        System.out.println(cardiology.toString("Cardiology"));
-        LOGGER.info(patientList);
-        cardiology.getFreeBedsByDepartment("abc");
     }
 }

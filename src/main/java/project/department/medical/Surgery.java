@@ -12,6 +12,7 @@ import java.util.Objects;
 public class Surgery extends MedicalDepartment {
 
     private static final Logger LOGGER;
+    private static Surgery instance = null;
     private static final ArrayList<Doctor> doctors = new ArrayList<>();
     private static final ArrayList<Nurse> nurses = new ArrayList<>();
     private static final ArrayList<Patient> patients = new ArrayList<>();
@@ -22,7 +23,15 @@ public class Surgery extends MedicalDepartment {
         bedsNumber = 10;
     }
 
-    public Surgery() {}
+    private Surgery() {}
+
+    public static Surgery getInstance() {
+        LOGGER.info("Getting Surgery class instance.");
+        if (instance == null) {
+            instance = new Surgery();
+        }
+        return instance;
+    }
 
     @Override
     public ArrayList<Doctor> getDoctorList() {

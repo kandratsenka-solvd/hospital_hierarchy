@@ -56,28 +56,28 @@ public abstract class MedicalDepartment extends Department {
         return getPatientList().size();
     }
 
-    private static Surgery createSurgery() {
-        return new Surgery();
+    private static Surgery getSurgery() {
+        return Surgery.getInstance();
     }
 
-    private static Cardiology createCardiology() {
-        return new Cardiology();
+    private static Cardiology getCardiology() {
+        return Cardiology.getInstance();
     }
 
-    private static Neurology createNeurology() {
-        return new Neurology();
+    private static Neurology getNeurology() {
+        return Neurology.getInstance();
     }
 
-    private static Oncology createOncology() {
-        return new Oncology();
+    private static Oncology getOncology() {
+        return Oncology.getInstance();
     }
 
-    private static Psychiatry createPsychiatry() {
-        return new Psychiatry();
+    private static Psychiatry getPsychiatry() {
+        return Psychiatry.getInstance();
     }
 
-    private static Pediatrics createPediatrics() {
-        return new Pediatrics();
+    private static Pediatrics getPediatrics() {
+        return Pediatrics.getInstance();
     }
 
     public void assignDoctor(Doctor doctor, Patient patient) {
@@ -141,18 +141,18 @@ public abstract class MedicalDepartment extends Department {
     public static HashMap<String, Integer> getFreeBedsByDepartmentList() {
         LOGGER.info("Getting free beds list by department...");
         HashMap<String, Integer> bedsByDepartment = new HashMap<>();
-        bedsByDepartment.put("Surgery", Surgery.bedsNumber - createSurgery().getPatientsNumber());
-        bedsByDepartment.put("Cardiology", Cardiology.bedsNumber - createCardiology().getPatientsNumber());
-        bedsByDepartment.put("Neurology", Neurology.bedsNumber - createNeurology().getPatientsNumber());
-        bedsByDepartment.put("Oncology", Oncology.bedsNumber - createOncology().getPatientsNumber());
-        bedsByDepartment.put("Psychiatry", Psychiatry.bedsNumber - createPsychiatry().getPatientsNumber());
-        bedsByDepartment.put("Pediatrics", Pediatrics.bedsNumber - createPediatrics().getPatientsNumber());
+        bedsByDepartment.put("Surgery", Surgery.bedsNumber - getSurgery().getPatientsNumber());
+        bedsByDepartment.put("Cardiology", Cardiology.bedsNumber - getCardiology().getPatientsNumber());
+        bedsByDepartment.put("Neurology", Neurology.bedsNumber - getNeurology().getPatientsNumber());
+        bedsByDepartment.put("Oncology", Oncology.bedsNumber - getOncology().getPatientsNumber());
+        bedsByDepartment.put("Psychiatry", Psychiatry.bedsNumber - getPsychiatry().getPatientsNumber());
+        bedsByDepartment.put("Pediatrics", Pediatrics.bedsNumber - getPediatrics().getPatientsNumber());
         return bedsByDepartment;
     }
 
     public void getFreeBedsByDepartment(String departmentName) throws DepartmentNotFoundException {
         LOGGER.info("Getting free beds by department...");
-        HashMap<String, Integer> bedsByDepartment = null;
+        HashMap<String, Integer> bedsByDepartment;
         try {
             bedsByDepartment = getFreeBedsByDepartmentList();
             if (!bedsByDepartment.containsKey(departmentName)) {
@@ -171,12 +171,12 @@ public abstract class MedicalDepartment extends Department {
     protected static LinkedList<Patient> getPatientlinkedList() {
         LOGGER.info("Getting patients linked list...");
         LinkedList<Patient> allPatients = new LinkedList<>();
-        allPatients.addAll(createSurgery().getPatientList());
-        allPatients.addAll(createCardiology().getPatientList());
-        allPatients.addAll(createNeurology().getPatientList());
-        allPatients.addAll(createOncology().getPatientList());
-        allPatients.addAll(createPediatrics().getPatientList());
-        allPatients.addAll(createPsychiatry().getPatientList());
+        allPatients.addAll(getSurgery().getPatientList());
+        allPatients.addAll(getCardiology().getPatientList());
+        allPatients.addAll(getNeurology().getPatientList());
+        allPatients.addAll(getOncology().getPatientList());
+        allPatients.addAll(getPediatrics().getPatientList());
+        allPatients.addAll(getPsychiatry().getPatientList());
         return allPatients;
     }
 
@@ -196,32 +196,32 @@ public abstract class MedicalDepartment extends Department {
 
     protected static int getDoctorsTotalNumber() {
         LOGGER.info("Getting doctors total number...");
-        return createSurgery().getDoctorsNumber() +
-                createCardiology().getDoctorsNumber() +
-                createNeurology().getDoctorsNumber() +
-                createOncology().getDoctorsNumber() +
-                createPsychiatry().getDoctorsNumber() +
-                createPediatrics().getDoctorsNumber();
+        return getSurgery().getDoctorsNumber() +
+                getCardiology().getDoctorsNumber() +
+                getNeurology().getDoctorsNumber() +
+                getOncology().getDoctorsNumber() +
+                getPsychiatry().getDoctorsNumber() +
+                getPediatrics().getDoctorsNumber();
     }
 
     protected static int getNursesTotalNumber() {
         LOGGER.info("Getting nurses total number...");
-        return createSurgery().getNursesNumber() +
-                createCardiology().getNursesNumber() +
-                createNeurology().getNursesNumber() +
-                createOncology().getNursesNumber() +
-                createPsychiatry().getNursesNumber() +
-                createPediatrics().getNursesNumber();
+        return getSurgery().getNursesNumber() +
+                getCardiology().getNursesNumber() +
+                getNeurology().getNursesNumber() +
+                getOncology().getNursesNumber() +
+                getPsychiatry().getNursesNumber() +
+                getPediatrics().getNursesNumber();
     }
 
     protected static int getPatientsTotalNumber() {
         LOGGER.info("Getting patients total number...");
-         return createSurgery().getPatientsNumber() +
-                 createCardiology().getPatientsNumber() +
-                 createNeurology().getPatientsNumber() +
-                 createOncology().getPatientsNumber() +
-                 createPsychiatry().getPatientsNumber() +
-                 createPediatrics().getPatientsNumber();
+         return getSurgery().getPatientsNumber() +
+                 getCardiology().getPatientsNumber() +
+                 getNeurology().getPatientsNumber() +
+                 getOncology().getPatientsNumber() +
+                 getPsychiatry().getPatientsNumber() +
+                 getPediatrics().getPatientsNumber();
     }
 
     @Override
