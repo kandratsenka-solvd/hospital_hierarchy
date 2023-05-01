@@ -13,7 +13,6 @@ import utils.LoggerUtil;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 
 
 public abstract class MedicalDepartment extends Department {
@@ -166,18 +165,6 @@ public abstract class MedicalDepartment extends Department {
         } finally {
             LOGGER.info("Free beds by department retrieval completed.");
         }
-    }
-
-    protected static LinkedList<Patient> getPatientlinkedList() {
-        LOGGER.info("Getting patients linked list...");
-        LinkedList<Patient> allPatients = new LinkedList<>();
-        allPatients.addAll(getSurgery().getPatientList());
-        allPatients.addAll(getCardiology().getPatientList());
-        allPatients.addAll(getNeurology().getPatientList());
-        allPatients.addAll(getOncology().getPatientList());
-        allPatients.addAll(getPediatrics().getPatientList());
-        allPatients.addAll(getPsychiatry().getPatientList());
-        return allPatients;
     }
 
     public static int getEmployeeNumber() {
