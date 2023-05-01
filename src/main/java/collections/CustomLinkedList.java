@@ -19,6 +19,7 @@ public class CustomLinkedList<T> extends LinkedList<T> {
 
     public void insertAt(int index, T item) {
         if (index < 0 || index > size()) {
+            LOGGER.error("Index outside of the list size.");
             throw new IndexLargerListSizeException();
         }
         add(index, item);
@@ -26,6 +27,7 @@ public class CustomLinkedList<T> extends LinkedList<T> {
 
     public T deleteAt(int index) {
         if (index < 0 || index >= size()) {
+            LOGGER.error("Index outside of the list size.");
             throw new IndexLargerListSizeException();
         }
         return remove(index);
