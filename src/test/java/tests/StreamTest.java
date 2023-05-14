@@ -17,7 +17,7 @@ import java.util.stream.Stream;
 public class StreamTest {
 
     @Test
-    public void testStream() throws EmptyListException {
+    public void testCollectionsWithStreamApi() throws EmptyListException {
         Doctor doctor1 = PersonUtil.generateDoctor();
         Doctor doctor2 = PersonUtil.generateDoctor();
         Doctor doctor3 = PersonUtil.generateDoctor();

@@ -13,6 +13,7 @@ import utils.LoggerUtil;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.stream.Collectors;
 
 
 public abstract class MedicalDepartment extends Department {
@@ -23,7 +24,7 @@ public abstract class MedicalDepartment extends Department {
         LOGGER = LoggerUtil.getLogger();
     }
 
-     public MedicalDepartment() {}
+    public MedicalDepartment() {}
 
     abstract public ArrayList<Doctor> getDoctorList();
 
@@ -124,13 +125,12 @@ public abstract class MedicalDepartment extends Department {
         }
     }
 
-    HashSet<String> getUniqueDiagnoses() throws EmptyListException {
+    public HashSet<String> getUniqueDiagnoses() throws EmptyListException {
         LOGGER.info("Getting list of unique diagnoses...");
-        HashSet<String> uniqueDiagnoses = new HashSet<>();
         ArrayList<Patient> patientList = getPatientList();
-        for (Patient patient: patientList) {
-            uniqueDiagnoses.add(patient.getDiagnosis());
-        }
+        HashSet<String> uniqueDiagnoses = patientList.stream()
+                .map(Patient::getDiagnosis)
+                .collect(Collectors.toCollection(HashSet::new));
         if (uniqueDiagnoses.isEmpty()) {
             throw new EmptyListException("No unique diagnoses found.");
         }

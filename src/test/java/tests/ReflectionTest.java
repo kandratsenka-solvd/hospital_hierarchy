@@ -8,7 +8,7 @@ import java.lang.reflect.*;
 public class ReflectionTest {
 
     @Test
-    public void testHospital() throws InvocationTargetException, IllegalAccessException {
+    public void testClassesWithReflection() throws InvocationTargetException, IllegalAccessException {
         Class<?> medicalDepartment = MedicalDepartment.class;
         Field[] fields = medicalDepartment.getDeclaredFields();
         Method[] methods = medicalDepartment.getDeclaredMethods();

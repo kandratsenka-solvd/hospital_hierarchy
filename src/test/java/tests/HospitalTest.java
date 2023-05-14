@@ -11,9 +11,9 @@ import project.person.resident.medical.Doctor;
 import project.person.resident.medical.Nurse;
 import utils.LoggerUtil;
 import utils.PersonUtil;
-
 import java.util.HashMap;
 import java.util.Map;
+
 
 public class HospitalTest {
 
