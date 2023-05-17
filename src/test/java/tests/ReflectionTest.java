@@ -1,7 +1,10 @@
 package tests;
 
+import org.apache.logging.log4j.Logger;
 import org.testng.annotations.Test;
 import project.department.medical.MedicalDepartment;
+import utils.LoggerUtil;
+
 import java.lang.reflect.*;
 
 
@@ -9,6 +12,7 @@ public class ReflectionTest {
 
     @Test
     public void testClassesWithReflection() throws InvocationTargetException, IllegalAccessException {
+        final Logger LOGGER = LoggerUtil.getLogger();
         Class<?> medicalDepartment = MedicalDepartment.class;
         Field[] fields = medicalDepartment.getDeclaredFields();
         Method[] methods = medicalDepartment.getDeclaredMethods();
@@ -16,41 +20,40 @@ public class ReflectionTest {
 
         for (Field field : fields) {
             field.setAccessible(true);
-            System.out.printf("""
-                            "Field: %s"
-                            "Type: %s"
-                            "Modifiers: %s"
-                            %n""",
-                    field.getName(), field.getType().getName(), Modifier.toString(field.getModifiers()));
+            LOGGER.info("""
+                Field: {}
+                Type: {}
+                Modifiers: {}
+                """, field.getName(), field.getType().getName(), Modifier.toString(field.getModifiers()));
         }
 
         for (Constructor<?> constructor : constructors) {
             constructor.setAccessible(true);
-            System.out.printf("""
-                            "Constructor: %s"
-                            "Modifiers: %s"
-                            "Parameters: %s"
-                            %n""",
+            LOGGER.info("""
+                            Constructor: {}
+                            Modifiers: {}
+                            Parameters: {}
+                            """,
                     constructor.getName(), Modifier.toString(constructor.getModifiers()),
                     Modifier.toString(constructor.getModifiers()));
             Parameter[] parameters = constructor.getParameters();
             for (Parameter parameter : parameters) {
-                System.out.println(parameter.getType().getName() + " " + parameter.getName() + "\n");
+                LOGGER.info(parameter.getType().getName() + " " + parameter.getName() + "\n");
             }
         }
 
         for (Method method : methods) {
             method.setAccessible(true);
             int modifiers = method.getModifiers();
-            System.out.printf("""
-                            "Modifier: %s"
-                            "Return type: %s"
-                            "Method name: %s"
-                            %n""",
+            LOGGER.info("""
+                            Modifier: {}
+                            Return type: {}
+                            Method name: {}
+                            """,
                     Modifier.toString(modifiers), method.getReturnType().getName(), method.getName());
             Class<?>[] paramTypes = method.getParameterTypes();
             for (Class<?> paramType : paramTypes) {
-                System.out.println(paramType.getName());
+                LOGGER.info(paramType.getName());
             }
             if (method.getName().equals("getDoctorsTotalNumber")) {
                 method.setAccessible(true);
