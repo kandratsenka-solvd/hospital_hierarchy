@@ -2,31 +2,52 @@ package connection;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.Semaphore;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 public class ConnectionPool {
-    private final Semaphore semaphore;
-    private BlockingQueue<Connection> pool;
+    private static final int INITIAL_POOL_SIZE = 5;
+    private static final BlockingQueue<Connection> allConnections = new ArrayBlockingQueue<>(INITIAL_POOL_SIZE);
+    private BlockingQueue<Connection> freeConnections;
 
-    public ConnectionPool(int poolSize) {
-        semaphore = new Semaphore(poolSize);
-        pool = new ArrayBlockingQueue<>(poolSize);
-        initializePool(poolSize);
+    private static final ConnectionPool instance = new ConnectionPool();
+
+    private ConnectionPool() {
+        createConnectionList();
+        freeConnections = new ArrayBlockingQueue<>(INITIAL_POOL_SIZE);
+        freeConnections.addAll(allConnections);
     }
 
-    private void initializePool(int poolSize) {
-        for (int i = 0; i < poolSize; i++) {
-            pool.offer(new Connection());
+    private static void createConnectionList() {
+        for (int i = 0; i < INITIAL_POOL_SIZE; i++) {
+            allConnections.add(new Connection());
         }
     }
 
-    public Connection getConnection() throws InterruptedException {
-        semaphore.acquire();
-        return pool.poll();
+    public static ConnectionPool getInstance() {
+        return instance;
     }
 
-    public void releaseConnection(Connection connection) {
-        pool.offer(connection);
-        semaphore.release();
+    public CompletableFuture<Connection> receiveConnection() {
+        CompletableFuture<Connection> future = new CompletableFuture<>();
+        try {
+            Connection connection = freeConnections.take();
+            future.complete(connection);
+        } catch (InterruptedException e) {
+            future.completeExceptionally(e);
+        }
+        return future;
+    }
+
+
+    public void returnConnection(CompletableFuture<Connection> connectionFuture) {
+        if (connectionFuture.isDone()) {
+            try {
+                Connection connection = connectionFuture.get();
+                freeConnections.offer(connection);
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
