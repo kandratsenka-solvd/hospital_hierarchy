@@ -49,7 +49,7 @@ public class ConnectionPool {
             int freeConnNum = freeConnections.size();
             Connection connection = freeConnections.poll();
             if (connection != null) {
-                LOGGER.info(String.format("Free connections: %s. Received connection: 1.", freeConnNum));
+                LOGGER.info(String.format("Free connections: %s. Received <- %s", freeConnNum, connection));
                 future.complete(connection);
             } else {
                 LOGGER.warn("No available connections.");
@@ -61,7 +61,10 @@ public class ConnectionPool {
                         LOGGER.error("Error while receiving connection.");
                         throw new RuntimeException(e);
                     }
-                }).thenAccept(future::complete);
+                }).thenAccept(receivedConnection -> {
+                    LOGGER.info("Received <- " + receivedConnection);
+                    future.complete(receivedConnection);
+                });
             }
         } catch (Exception e) {
             future.completeExceptionally(e);
@@ -72,7 +75,7 @@ public class ConnectionPool {
     }
 
     public void returnConnection(Connection connection) {
+        LOGGER.info("Returned -> " + connection);
         freeConnections.offer(connection);
-        LOGGER.info("returned the connection.");
     }
 }

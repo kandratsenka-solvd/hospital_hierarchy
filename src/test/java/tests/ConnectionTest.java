@@ -54,11 +54,13 @@ public class ConnectionTest {
                 try {
                     CompletionStage<Connection> connectionStage = connectionPool.receiveConnection();
                     connectionStage.thenAccept(connection -> {
+                        CompletableFuture<Void> future = new CompletableFuture<>();
                         try {
                             Connection.performAction();
                         } finally {
                             connectionPool.returnConnection(connection);
                             latch.countDown();
+                            future.complete(null);
                         }
                     });
                 } catch (Exception e) {
