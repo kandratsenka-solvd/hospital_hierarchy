@@ -4,15 +4,12 @@ import connection.Connection;
 import connection.ConnectionPool;
 import connection.MyRunnable;
 import connection.MyThread;
-import org.apache.logging.log4j.Logger;
 import org.testng.annotations.Test;
-import utils.LoggerUtil;
 
 import java.util.concurrent.*;
 
 
 public class ConnectionTest {
-    final Logger LOGGER = LoggerUtil.getLogger();
 
     @Test
     public void testRunnable() {
@@ -49,21 +46,17 @@ public class ConnectionTest {
 
     @Test
     public void testConnectionPool() throws InterruptedException {
+        int threadsNumber = 7;
         ConnectionPool connectionPool = ConnectionPool.getInstance();
-        ExecutorService executorService = Executors.newFixedThreadPool(7);
-        CountDownLatch latch = new CountDownLatch(7);
-        for (int i = 0; i < 7; i++) {
+        ExecutorService executorService = Executors.newFixedThreadPool(threadsNumber);
+        CountDownLatch latch = new CountDownLatch(threadsNumber);
+        for (int i = 0; i < threadsNumber; i++) {
             executorService.submit(() -> {
                 try {
                     CompletionStage<Connection> connectionStage = connectionPool.receiveConnection();
                     connectionStage.thenAccept(connection -> {
-                        LOGGER.info(String.format("Thread %s received connection.", Thread.currentThread().getName()));
                         try {
-                            LOGGER.info(String
-                                    .format("Thread %s is performing some action...", Thread.currentThread().getName()));
-                            Thread.sleep(2000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
+                            Connection.performAction();
                         } finally {
                             connectionPool.returnConnection(connection);
                             latch.countDown();

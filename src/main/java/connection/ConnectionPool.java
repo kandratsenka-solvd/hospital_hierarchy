@@ -13,8 +13,8 @@ public class ConnectionPool {
     final Logger LOGGER = LoggerUtil.getLogger();
     private static final int INITIAL_POOL_SIZE = 5;
     private static final BlockingQueue<Connection> allConnections = new ArrayBlockingQueue<>(INITIAL_POOL_SIZE);
-    private BlockingQueue<Connection> freeConnections;
-    private ReentrantLock lock = new ReentrantLock();
+    private final BlockingQueue<Connection> freeConnections;
+    private final ReentrantLock lock = new ReentrantLock();
     private static volatile ConnectionPool instance;
 
     private ConnectionPool() {
@@ -42,14 +42,19 @@ public class ConnectionPool {
 
     public CompletionStage<Connection> receiveConnection() {
         CompletableFuture<Connection> future = new CompletableFuture<>();
+        String currentThreadName = Thread.currentThread().getName();
         try {
             lock.lock();
+            int freeConnNum = freeConnections.size();
             Connection connection = freeConnections.poll();
             if (connection != null) {
+                LOGGER.info(String.format("Free connections: %s. Received connection: 1.", freeConnNum));
                 future.complete(connection);
             } else {
+                LOGGER.warn("No available connections.");
                 CompletableFuture.supplyAsync(() -> {
                     try {
+                        LOGGER.warn(String.format("<==> [%s]. Waiting for connection...", currentThreadName));
                         return freeConnections.take();
                     } catch (InterruptedException e) {
                         LOGGER.error("Error while receiving connection.");
@@ -67,5 +72,6 @@ public class ConnectionPool {
 
     public void returnConnection(Connection connection) {
         freeConnections.offer(connection);
+        LOGGER.info("returned the connection.");
     }
 }
