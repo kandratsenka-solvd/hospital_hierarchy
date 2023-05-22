@@ -3,6 +3,7 @@ package tests;
 import connection.Connection;
 import connection.ConnectionPool;
 import connection.MyRunnable;
+import connection.MyThread;
 import org.apache.logging.log4j.Logger;
 import org.testng.annotations.Test;
 import utils.LoggerUtil;
@@ -14,11 +15,36 @@ public class ConnectionTest {
     final Logger LOGGER = LoggerUtil.getLogger();
 
     @Test
+    public void testRunnable() {
+        int numberOfThreads = 5;
+        CountDownLatch latch = new CountDownLatch(numberOfThreads);
+
+        for (int i = 0; i < numberOfThreads; i++) {
+            MyRunnable myThread = new MyRunnable(latch);
+            Thread thread = new Thread(myThread);
+            thread.start();
+        }
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Test
     public void testMultiThread() {
-        Thread thread1 = new Thread(new MyRunnable(), "Thread 1");
-        Thread thread2 = new Thread(new MyRunnable(), "Thread 2");
-        thread1.start();
-        thread2.start();
+        int numberOfThreads = 5;
+        CountDownLatch latch = new CountDownLatch(numberOfThreads);
+
+        for (int i = 0; i < numberOfThreads; i++) {
+            MyThread myThread = new MyThread(latch);
+            myThread.start();
+        }
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
