@@ -49,23 +49,24 @@ public class ConnectionTest {
 
     @Test
     public void testConnectionPool() throws InterruptedException {
+        int threadsNumber = 7;
         ConnectionPool connectionPool = ConnectionPool.getInstance();
-        ExecutorService executorService = Executors.newFixedThreadPool(7);
-        CountDownLatch latch = new CountDownLatch(7);
-        for (int i = 0; i < 7; i++) {
+        ExecutorService executorService = Executors.newFixedThreadPool(threadsNumber);
+        CountDownLatch latch = new CountDownLatch(threadsNumber);
+        for (int i = 0; i < threadsNumber; i++) {
             executorService.submit(() -> {
                 try {
                     CompletionStage<Connection> connectionStage = connectionPool.receiveConnection();
                     connectionStage.thenAccept(connection -> {
-                        LOGGER.info(String.format("Thread %s received connection.", Thread.currentThread().getName()));
+                        LOGGER.info("Received the connection.");
                         try {
-                            LOGGER.info(String
-                                    .format("Thread %s is performing some action...", Thread.currentThread().getName()));
+                            LOGGER.info("Is performing some action...");
                             Thread.sleep(2000);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         } finally {
                             connectionPool.returnConnection(connection);
+                            LOGGER.info("returned the connection.");
                             latch.countDown();
                         }
                     });

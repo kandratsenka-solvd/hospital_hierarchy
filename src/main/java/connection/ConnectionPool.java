@@ -42,14 +42,21 @@ public class ConnectionPool {
 
     public CompletionStage<Connection> receiveConnection() {
         CompletableFuture<Connection> future = new CompletableFuture<>();
+        String currentThreadName = Thread.currentThread().getName();
         try {
             lock.lock();
+            if (freeConnections.size() != 0) {
+            LOGGER.info("Free connections: " + freeConnections.size());
+            } else {
+                LOGGER.warn("No available connections.");
+            }
             Connection connection = freeConnections.poll();
             if (connection != null) {
                 future.complete(connection);
             } else {
                 CompletableFuture.supplyAsync(() -> {
                     try {
+                        LOGGER.warn(String.format("<==> [%s]. Waiting for connection...", currentThreadName));
                         return freeConnections.take();
                     } catch (InterruptedException e) {
                         LOGGER.error("Error while receiving connection.");
