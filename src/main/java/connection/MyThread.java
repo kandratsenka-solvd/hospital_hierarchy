@@ -5,12 +5,12 @@ import utils.LoggerUtil;
 
 import java.util.concurrent.CountDownLatch;
 
-public class MyRunnable implements Runnable {
+public class MyThread extends Thread {
 
     final Logger LOGGER = LoggerUtil.getLogger();
     private final CountDownLatch latch;
 
-    public MyRunnable(CountDownLatch latch) {
+    public MyThread(CountDownLatch latch) {
         this.latch = latch;
     }
 
@@ -25,7 +25,7 @@ public class MyRunnable implements Runnable {
             throw new RuntimeException(e);
         } finally {
             latch.countDown();
-            LOGGER.info("The runnable has finished executing.");
+            LOGGER.info("The thread has finished executing.");
         }
     }
 }
