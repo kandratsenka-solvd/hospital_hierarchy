@@ -3,6 +3,7 @@ package connection;
 import org.apache.logging.log4j.Logger;
 import utils.LoggerUtil;
 
+
 public class Connection {
 
     private static final Logger LOGGER = LoggerUtil.getLogger();
