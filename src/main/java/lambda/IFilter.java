@@ -1,4 +1,4 @@
-package lambdas;
+package lambda;
 
 public interface IFilter<T> {
 

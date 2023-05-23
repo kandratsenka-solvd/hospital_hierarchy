@@ -1,7 +1,7 @@
 package utils;
 
 import com.github.javafaker.Faker;
-import exceptions.EmptyListException;
+import exception.EmptyListException;
 import org.apache.logging.log4j.Logger;
 import project.enums.JobTitle;
 import project.enums.specialTitle.DoctorSpecialty;

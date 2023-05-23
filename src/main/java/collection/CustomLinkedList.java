@@ -1,6 +1,6 @@
-package collections;
+package collection;
 
-import exceptions.IndexLargerListSizeException;
+import exception.IndexLargerListSizeException;
 import org.apache.logging.log4j.Logger;
 import utils.LoggerUtil;
 

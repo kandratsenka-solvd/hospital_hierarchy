@@ -1,12 +1,9 @@
 package project.person.resident.office;
 
-import com.github.javafaker.Faker;
-import exceptions.InsufficientRightsException;
+import exception.InsufficientRightsException;
 import org.apache.logging.log4j.Logger;
 import project.person.resident.medical.Doctor;
 import utils.LoggerUtil;
-
-import java.util.Random;
 
 public class HRRecruiter extends OfficeResident {
 

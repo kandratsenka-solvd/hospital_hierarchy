@@ -1,8 +1,8 @@
 package project.department.medical;
 
-import exceptions.DepartmentNotFoundException;
-import exceptions.EmptyListException;
-import exceptions.PersonNotFoundException;
+import exception.DepartmentNotFoundException;
+import exception.EmptyListException;
+import exception.PersonNotFoundException;
 import org.apache.logging.log4j.Logger;
 import project.department.Department;
 import project.person.nonResident.Patient;

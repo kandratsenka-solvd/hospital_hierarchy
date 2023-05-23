@@ -1,8 +1,8 @@
 package tests;
 
-import lambdas.IConnector;
-import lambdas.IFilter;
-import lambdas.ITransformer;
+import lambda.IConnector;
+import lambda.IFilter;
+import lambda.ITransformer;
 import org.apache.logging.log4j.Logger;
 import org.testng.annotations.Test;
 import utils.LoggerUtil;
