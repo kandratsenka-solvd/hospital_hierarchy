@@ -1,7 +1,7 @@
 package tests;
 
-import collections.CustomLinkedList;
-import exceptions.EmptyListException;
+import collection.CustomLinkedList;
+import exception.EmptyListException;
 import org.apache.logging.log4j.Logger;
 import org.testng.annotations.Test;
 import project.department.medical.Cardiology;
