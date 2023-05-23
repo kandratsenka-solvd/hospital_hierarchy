@@ -1,16 +1,16 @@
-package connection;
+package thread;
 
 import org.apache.logging.log4j.Logger;
 import utils.LoggerUtil;
 
 import java.util.concurrent.CountDownLatch;
 
-public class MyThread extends Thread {
+public class MyRunnable implements Runnable {
 
     final Logger LOGGER = LoggerUtil.getLogger();
     private final CountDownLatch latch;
 
-    public MyThread(CountDownLatch latch) {
+    public MyRunnable(CountDownLatch latch) {
         this.latch = latch;
     }
 
@@ -25,7 +25,7 @@ public class MyThread extends Thread {
             throw new RuntimeException(e);
         } finally {
             latch.countDown();
-            LOGGER.info("The thread has finished executing.");
+            LOGGER.info("The runnable has finished executing.");
         }
     }
 }
